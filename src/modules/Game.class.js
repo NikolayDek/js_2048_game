@@ -85,17 +85,17 @@ export default class Game {
   }
 
   start() {
-    this.state = this.createInitialState();
     this.score = 0;
     this.status = 'playing';
-
+    
     this.addRandomTile(this.state);
     this.addRandomTile(this.state);
   }
-
+  
   restart() {
     this.state = this.createInitialState();
     this.score = 0;
+    this.status = 'playing';
 
     this.addRandomTile(this.state);
     this.addRandomTile(this.state);
@@ -207,5 +207,3 @@ export default class Game {
     this.state[i][j] = randomValue;
   }
 }
-
-module.exports = Game;
