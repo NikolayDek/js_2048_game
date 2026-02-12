@@ -1,5 +1,6 @@
 'use strict';
 
+import '../styles/main.scss';
 import Game from '../modules/Game.class';
 
 const rows = document.querySelectorAll('.field-row');

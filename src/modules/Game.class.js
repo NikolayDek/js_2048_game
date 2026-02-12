@@ -87,11 +87,11 @@ export default class Game {
   start() {
     this.score = 0;
     this.status = 'playing';
-    
+
     this.addRandomTile(this.state);
     this.addRandomTile(this.state);
   }
-  
+
   restart() {
     this.state = this.createInitialState();
     this.score = 0;
