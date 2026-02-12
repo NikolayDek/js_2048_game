@@ -207,3 +207,4 @@ export default class Game {
     this.state[i][j] = randomValue;
   }
 }
+
