@@ -1,12 +1,21 @@
+import {
+  BOARD_SIZE,
+  TILE_VALUE,
+  SECOND_TILE_VALUE,
+  PROBABILITY_OF_VALUE,
+  WIN_VALUE,
+  GAME_STATUS,
+} from '../constants/constants';
+
 export default class Game {
   constructor() {
     this.state = this.createInitialState();
     this.score = 0;
-    this.status = 'idle';
+    this.status = GAME_STATUS.IDLE;
   }
 
   createInitialState() {
-    return (this.state = Array.from({ length: 4 }, () => Array(4).fill(0)));
+    return Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(0));
   }
 
   moveLeft() {
@@ -70,15 +79,15 @@ export default class Game {
   getStatus() {
     const canMove = this.canMoveCells(this.state);
     const isYouWin = this.state.some((row) => {
-      return row.some((cell) => cell === 2048);
+      return row.some((cell) => cell === WIN_VALUE);
     });
 
     if (isYouWin) {
-      this.status = 'win';
+      this.status = GAME_STATUS.WIN;
     } else if (!canMove) {
-      this.status = 'lose';
+      this.status = GAME_STATUS.LOSE;
     } else {
-      this.status = 'playing';
+      this.status = GAME_STATUS.PLAYING;
     }
 
     return this.status;
@@ -86,7 +95,7 @@ export default class Game {
 
   start() {
     this.score = 0;
-    this.status = 'playing';
+    this.status = GAME_STATUS.PLAYING;
 
     this.addRandomTile(this.state);
     this.addRandomTile(this.state);
@@ -95,28 +104,26 @@ export default class Game {
   restart() {
     this.state = this.createInitialState();
     this.score = 0;
-    this.status = 'playing';
+    this.status = GAME_STATUS.PLAYING;
 
     this.addRandomTile(this.state);
     this.addRandomTile(this.state);
   }
 
   canMoveCells(board) {
-    const size = board.length;
-
-    for (let i = 0; i < size; i++) {
-      for (let j = 0; j < size; j++) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      for (let j = 0; j < BOARD_SIZE; j++) {
         const current = board[i][j];
 
         if (current === 0) {
           return true;
         }
 
-        if (j < size - 1 && current === board[i][j + 1]) {
+        if (j < BOARD_SIZE - 1 && current === board[i][j + 1]) {
           return true;
         }
 
-        if (i < size - 1 && current === board[i + 1][j]) {
+        if (i < BOARD_SIZE - 1 && current === board[i + 1][j]) {
           return true;
         }
       }
@@ -176,15 +183,14 @@ export default class Game {
   }
 
   rotate(board, direction = '') {
-    const size = board.length;
-    const newBoard = Array.from({ length: size }, () => Array(size).fill(0));
+    const newBoard = this.createInitialState();
 
-    for (let i = 0; i < size; i++) {
-      for (let j = 0; j < size; j++) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      for (let j = 0; j < BOARD_SIZE; j++) {
         if (direction) {
-          newBoard[size - 1 - j][i] = board[i][j];
+          newBoard[BOARD_SIZE - 1 - j][i] = board[i][j];
         } else {
-          newBoard[j][size - 1 - i] = board[i][j];
+          newBoard[j][BOARD_SIZE - 1 - i] = board[i][j];
         }
       }
     }
@@ -202,9 +208,9 @@ export default class Game {
     const randomIndex = Math.floor(Math.random() * emptyCells.length);
     const { i, j } = emptyCells[randomIndex];
 
-    const randomValue = Math.random() < 0.9 ? 2 : 4;
+    const randomValue =
+      Math.random() < PROBABILITY_OF_VALUE ? TILE_VALUE : SECOND_TILE_VALUE;
 
     this.state[i][j] = randomValue;
   }
 }
-

@@ -1,5 +1,6 @@
 'use strict';
 
+import { GAME_STATUS } from '../constants/constants';
 import '../styles/main.scss';
 import Game from '../modules/Game.class';
 
@@ -13,7 +14,7 @@ const messageStart = document.querySelector('.message-start');
 const game = new Game();
 
 button.addEventListener('click', () => {
-  if (game.status === 'idle') {
+  if (game.status === GAME_STATUS.IDLE) {
     game.start();
   } else {
     game.restart();
@@ -23,7 +24,7 @@ button.addEventListener('click', () => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (game.status !== 'playing') {
+  if (game.status !== GAME_STATUS.PLAYING) {
     return;
   }
 
@@ -55,24 +56,24 @@ function render(board) {
   messageWin.classList.add('hidden');
 
   switch (game.status) {
-    case 'idle':
+    case GAME_STATUS.IDLE:
       button.classList.add('start');
       button.textContent = 'Start';
       messageStart.classList.remove('hidden');
       break;
 
-    case 'playing':
+    case GAME_STATUS.PLAYING:
       button.classList.add('restart');
       button.textContent = 'Restart';
       break;
 
-    case 'win':
+    case GAME_STATUS.WIN:
       button.classList.add('restart');
       button.textContent = 'Restart';
       messageWin.classList.remove('hidden');
       break;
 
-    case 'lose':
+    case GAME_STATUS.LOSE:
       button.classList.add('restart');
       button.textContent = 'Restart';
       messageLose.classList.remove('hidden');
