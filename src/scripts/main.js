@@ -27,7 +27,7 @@ button.addEventListener('click', () => {
 
 document.addEventListener('touchstart', (e) => {
   const touch = e.changedTouches[0];
-  
+
   touchStartX = touch.clientX;
   touchStartY = touch.clientY;
 });
