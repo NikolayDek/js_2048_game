@@ -9,3 +9,4 @@ export const GAME_STATUS = {
   LOSE: 'lose',
   PLAYING: 'playing',
 };
+export const MIN_SWIPE_DISTANCE = 30;

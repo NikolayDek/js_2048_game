@@ -1,6 +1,6 @@
 'use strict';
 
-import { GAME_STATUS } from '../constants/constants';
+import { GAME_STATUS, MIN_SWIPE_DISTANCE } from '../constants/constants';
 import '../styles/main.scss';
 import Game from '../modules/Game.class';
 
@@ -12,12 +12,54 @@ const messageWin = document.querySelector('.message-win');
 const messageStart = document.querySelector('.message-start');
 
 const game = new Game();
+let touchStartX = 0;
+let touchStartY = 0;
 
 button.addEventListener('click', () => {
   if (game.status === GAME_STATUS.IDLE) {
     game.start();
   } else {
     game.restart();
+  }
+
+  render(game.state);
+});
+
+document.addEventListener('touchstart', (e) => {
+  const touch = e.changedTouches[0];
+  
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+});
+
+document.addEventListener('touchend', (e) => {
+  if (game.status !== GAME_STATUS.PLAYING) {
+    return;
+  }
+
+  const touch = e.changedTouches[0];
+  const diffX = touch.clientX - touchStartX;
+  const diffY = touch.clientY - touchStartY;
+
+  const absX = Math.abs(diffX);
+  const absY = Math.abs(diffY);
+
+  if (absX < MIN_SWIPE_DISTANCE && absY < MIN_SWIPE_DISTANCE) {
+    return;
+  }
+
+  if (absX > absY) {
+    if (diffX > 0) {
+      game.moveRight();
+    } else {
+      game.moveLeft();
+    }
+  } else {
+    if (diffY > 0) {
+      game.moveDown();
+    } else {
+      game.moveUp();
+    }
   }
 
   render(game.state);
