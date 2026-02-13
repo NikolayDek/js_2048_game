@@ -14,6 +14,13 @@ body {
   background-position: center;
 }
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
 .field-cell {
   background: #d6cdc4;
   width: 75px;

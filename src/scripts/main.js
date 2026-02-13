@@ -10,6 +10,7 @@ const button = document.querySelector('.button');
 const messageLose = document.querySelector('.message-lose');
 const messageWin = document.querySelector('.message-win');
 const messageStart = document.querySelector('.message-start');
+const gameContainer = document.querySelector('.container');
 
 const game = new Game();
 let touchStartX = 0;
@@ -25,29 +26,30 @@ button.addEventListener('click', () => {
   render(game.state);
 });
 
-document.addEventListener('touchstart', (e) => {
-  const touch = e.changedTouches[0];
 
+gameContainer.addEventListener('touchstart', (e) => {
+  const touch = e.changedTouches[0];
+  
   touchStartX = touch.clientX;
   touchStartY = touch.clientY;
 });
 
-document.addEventListener('touchend', (e) => {
+gameContainer.addEventListener('touchend', (e) => {
   if (game.status !== GAME_STATUS.PLAYING) {
     return;
   }
-
+  
   const touch = e.changedTouches[0];
   const diffX = touch.clientX - touchStartX;
   const diffY = touch.clientY - touchStartY;
-
+  
   const absX = Math.abs(diffX);
   const absY = Math.abs(diffY);
-
+  
   if (absX < MIN_SWIPE_DISTANCE && absY < MIN_SWIPE_DISTANCE) {
     return;
   }
-
+  
   if (absX > absY) {
     if (diffX > 0) {
       game.moveRight();
@@ -61,9 +63,15 @@ document.addEventListener('touchend', (e) => {
       game.moveUp();
     }
   }
-
+  
   render(game.state);
 });
+
+gameContainer.addEventListener(
+  'touchmove',
+  (e) => e.preventDefault(),
+  { passive: false }
+);
 
 document.addEventListener('keydown', (e) => {
   if (game.status !== GAME_STATUS.PLAYING) {
