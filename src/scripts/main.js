@@ -26,10 +26,9 @@ button.addEventListener('click', () => {
   render(game.state);
 });
 
-
 gameContainer.addEventListener('touchstart', (e) => {
   const touch = e.changedTouches[0];
-  
+
   touchStartX = touch.clientX;
   touchStartY = touch.clientY;
 });
@@ -38,18 +37,18 @@ gameContainer.addEventListener('touchend', (e) => {
   if (game.status !== GAME_STATUS.PLAYING) {
     return;
   }
-  
+
   const touch = e.changedTouches[0];
   const diffX = touch.clientX - touchStartX;
   const diffY = touch.clientY - touchStartY;
-  
+
   const absX = Math.abs(diffX);
   const absY = Math.abs(diffY);
-  
+
   if (absX < MIN_SWIPE_DISTANCE && absY < MIN_SWIPE_DISTANCE) {
     return;
   }
-  
+
   if (absX > absY) {
     if (diffX > 0) {
       game.moveRight();
@@ -63,15 +62,13 @@ gameContainer.addEventListener('touchend', (e) => {
       game.moveUp();
     }
   }
-  
+
   render(game.state);
 });
 
-gameContainer.addEventListener(
-  'touchmove',
-  (e) => e.preventDefault(),
-  { passive: false }
-);
+gameContainer.addEventListener('touchmove', (e) => e.preventDefault(), {
+  passive: false,
+});
 
 document.addEventListener('keydown', (e) => {
   if (game.status !== GAME_STATUS.PLAYING) {

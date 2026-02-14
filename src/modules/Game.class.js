@@ -19,50 +19,74 @@ export default class Game {
   }
 
   moveLeft() {
+    const prevState = this.state.map(row => [...row]);
     const { board: newBoard, score } = this.slideCells(this.state);
 
-    this.state = newBoard;
-    this.score += score;
-    this.addRandomTile();
+    const isBoardChanged = this.checkBoardChange(newBoard, prevState);
+    
+    if (isBoardChanged) {
+      this.state = newBoard;
+      this.score += score;
+      this.addRandomTile();
+    };
+
     this.getStatus();
 
     return newBoard;
   }
 
   moveRight() {
+    const prevState = this.state.map(row => [...row]);
     const reversed = this.reverse(this.state);
     const { board: newBoard, score } = this.slideCells(reversed);
     const resBoard = this.reverse(newBoard);
 
-    this.state = resBoard;
-    this.score += score;
-    this.addRandomTile();
+    const isBoardChanged = this.checkBoardChange(resBoard, prevState);
+    
+    if (isBoardChanged) {
+      this.state = resBoard;
+      this.score += score;
+      this.addRandomTile();
+    };
+    
     this.getStatus();
 
     return resBoard;
   }
 
   moveUp() {
+    const prevState = this.state.map(row => [...row]);
     const rotated = this.rotate(this.state, 'back');
     const { board: newBoard, score } = this.slideCells(rotated);
     const resBoard = this.rotate(newBoard);
 
-    this.state = resBoard;
-    this.score += score;
-    this.addRandomTile();
+    const isBoardChanged = this.checkBoardChange(resBoard, prevState);
+    
+    if (isBoardChanged) {
+      this.state = resBoard;
+      this.score += score;
+      this.addRandomTile();
+    };
+    
     this.getStatus();
 
     return resBoard;
   }
 
   moveDown() {
+    const prevState = this.state.map(row => [...row]);
     const rotated = this.rotate(this.state);
     const { board: newBoard, score } = this.slideCells(rotated);
     const resBoard = this.rotate(newBoard, 'back');
 
-    this.state = resBoard;
-    this.score += score;
-    this.addRandomTile();
+    const isBoardChanged = this.checkBoardChange(resBoard, prevState);
+    
+    if (isBoardChanged) {
+      this.state = resBoard;
+      this.score += score;
+      this.addRandomTile();
+    };
+    
     this.getStatus();
 
     return resBoard;
@@ -212,5 +236,17 @@ export default class Game {
       Math.random() < PROBABILITY_OF_VALUE ? TILE_VALUE : SECOND_TILE_VALUE;
 
     this.state[i][j] = randomValue;
+  }
+
+  checkBoardChange(board1, board2) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      for (let j = 0; j < BOARD_SIZE; j++) {
+        if (board1[i][j] !== board2[i][j]) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 }
